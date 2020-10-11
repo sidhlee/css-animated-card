@@ -9,9 +9,10 @@
   --clr-light: #fff;
   --clr-accent: rgb(222, 52, 0);
   --clr-accent-dark: rgb(163, 38, 0);
-  --clr-secondary: rgb(0, 62, 163);
+  --clr-secondary: rgb(24, 86, 168);
 
   --border-radius: 0.5em;
+  --transition-timing-function: cubic-bezier(0.04, 0.93, 0.63, 1.07);
 }
 
 body {
@@ -35,6 +36,16 @@ img {
   display: block; // remove space at the edges
 }
 
+.btn {
+  cursor: pointer;
+  border: 0;
+  background: var(--clr-secondary);
+  border-radius: 100vw; // pill
+  color: var(--clr-light);
+  font-weight: bold;
+  padding: 0.6em 1.5em;
+}
+
 .game {
   // for abs-positioning within the game container
   position: relative;
@@ -44,7 +55,8 @@ img {
 // both streamers container in front and back have flex display
 .streamers {
   display: flex;
-
+  text-align: center;
+  // we want all the streamer images to have this shape
   img {
     width: 2em;
     height: 2em;
@@ -62,11 +74,16 @@ img {
   padding: 0.6em 0.6em 1em;
   // use https://bennettfeely.com/clippy/
   clip-path: polygon(0 0, 100% 0%, 100% 100%, 50% 88%, 0 100%);
+  z-index: 1000;
+  transition: transform 250ms var(--transition-timing-function);
 }
 
 .front {
+  transition: 250ms;
   .thumbnail {
     border-radius: var(--border-radius);
+    width: 100%; // fill in container's entire width
+    object-fit: cover; // while maintaining the image ratio
   }
 
   .name {
@@ -91,5 +108,121 @@ img {
 }
 
 .back {
-  display: none;
+  opacity: 0;
+  position: absolute; // so that the content doesn't stretch the card out
+  top: 53%;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateY(30%);
+
+  .streaming-info {
+    columns: 2;
+    // You can do column-rule (line in-between) with columns!
+    column-rule: 1px solid rgba(255, 255, 255, 0.25);
+  }
+  .btn {
+    margin: 1.3em 0;
+  }
+
+  .game-stat {
+    font-size: 1.125rem;
+    text-align: center;
+    padding: 0 1em;
+
+    span {
+      display: block;
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+  }
+}
+
+.background {
+  background: rgb(37, 44, 49);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+
+  opacity: 0;
+  transform: scale(0.2, 0.9);
+  border-radius: var(--border-radius);
+}
+
+.game:hover {
+  .rank {
+    transform: translate(120%, -70%);
+  }
+
+  .front {
+    transform: translateY(-30%) scale(0.8);
+    .name {
+      animation: game-name 100ms forwards;
+    }
+    .stats {
+      opacity: 0;
+    }
+  }
+
+  .back {
+    // smooth entering
+    transition: transform 250ms ease, opacity 150ms linear;
+    transform: translateY(0);
+    opacity: 1;
+    .streamers {
+      width: 100%;
+      font-size: 0.9rem;
+      justify-content: space-between;
+    }
+    .streamer {
+      & .icon > img {
+        margin: auto;
+      }
+    }
+    .name {
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+    .number {
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+  }
+
+  .background {
+    transition: transform 250ms var(--transition-timing-function),
+      opacity 100ms linear;
+    transform: scale(1.3, 1.2);
+    opacity: 1;
+  }
+}
+
+// using keyframes instead of transition because you can't transition text-align;
+@keyframes game-name {
+  0% {
+    text-align: left;
+    opacity: 1;
+  }
+
+  20% {
+    text-align: left;
+    opacity: 0;
+  }
+
+  50% {
+    text-align: center;
+    opacity: 0;
+    transform: scale(1.2);
+  }
+
+  100% {
+    text-align: center;
+    opacity: 1;
+    transform: scale(1.2);
+  }
 }
