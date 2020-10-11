@@ -46,6 +46,16 @@ img {
   padding: 0.6em 1.5em;
 }
 
+.icon::before {
+  display: inline-block;
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900; // solid icon as default
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
 .game {
   // for abs-positioning within the game container
   position: relative;
@@ -91,9 +101,19 @@ img {
   }
   .stats {
     display: flex;
-
     justify-content: space-between;
     align-items: center;
+    .viewers {
+      display: flex;
+      align-items: center;
+      &::before {
+        font-weight: 900; // if something is not working, try different font-weight
+        content: '\f007';
+        color: rgba(255, 255, 255, 0.7); // smooth the icon a little bit
+        font-size: 0.75rem;
+        margin-right: 0.5em;
+      }
+    }
   }
   .streamers img {
     border: 2px solid var(--clr-dark);
