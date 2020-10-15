@@ -297,16 +297,12 @@ img {
 
     img {
       width: 100%;
-      opacity: 0.3;
+      opacity: 0.2;
       clip-path: url(#wave);
+      height: 120px;
+      object-fit: cover;
+      object-position: top center;
     }
-  }
-  .wave {
-    position: absolute;
-    width: 200%;
-    top: 4em;
-    left: 0;
-    animation: wave linear 5s infinite;
   }
 
   @keyframes wave {
